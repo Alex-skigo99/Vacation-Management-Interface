@@ -16,11 +16,11 @@ export type UserCreataion = z.infer<typeof UserSchema>;
 export const VacationSchema = z.object({
   requester_id: z.number(),
   validator_id: z.number(),
-  start_date: z.string().date(),
-  end_date: z.string().date(),
-  reason: z.string().max(255).optional(),
+  start_date: z.string().date().or(z.date()),
+  end_date: z.string().date().or(z.date()),
+  reason: z.string().max(255).optional().or(z.null().optional()),
   status: StatusSchema,
-  comments: z.string().max(1000).optional(),
+  comments: z.string().max(1000).optional().or(z.null().optional()),
 }).strict();
 
 export type VacationCreation = z.infer<typeof VacationSchema>;

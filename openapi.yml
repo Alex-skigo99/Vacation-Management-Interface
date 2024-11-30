@@ -70,7 +70,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Vacation'
+              $ref: '#/components/schemas/VacationUpdate'
       responses:
         '200':
           description: Success
@@ -78,7 +78,7 @@ paths:
           description: Bad Request
           $ref: '#/components/responses/BadRequest'
         '404':
-          description: Invoice not found
+          description: Element not found
           $ref: '#/components/responses/BadRequest'
         '422':
           description: Validation error
@@ -99,7 +99,7 @@ paths:
         '200':
           description: Success
         '404':
-          description: Invoice not found
+          description: Element not found
           $ref: '#/components/responses/BadRequest'
   /api/users:
     get:
@@ -149,10 +149,10 @@ components:
           type: integer
         validator_id:
           type: integer
-        start-date:
+        start_date:
           type: string
           format: date
-        end-date:
+        end_date:
           type: string
           format: date
         reason:
@@ -162,9 +162,22 @@ components:
         comments:
           type: string
       required:
-        - status
+        - requester_id
+        - validator_id
         - start-date
         - end-date
+        - status
+    VacationUpdate:
+      type: object
+      properties:
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+        comments:
+          type: string
+      required:
+        - status
     Status:
       type: string
       enum:

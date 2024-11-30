@@ -37,8 +37,6 @@ export const mainController = {
             ...req.body,
             requester_id: Number(req.body.requester_id),
             validator_id: Number(req.body.validator_id),
-            start_date: Date.parse(req.body.start_date),
-            end_date: Date.parse(req.body.end_date)
         };
         const newVacation = await mainModel.create(vacationData);
         res.status(200).json(newVacation);
@@ -47,9 +45,11 @@ export const mainController = {
     update: async (req: Request, res: Response) => {
         const id = Number(req.params.id);
         const vacation = await mainModel.findByIdOrThrow(id);
+        delete vacation.created_at;
+        delete vacation.id;
         const vacationData = {
             ...vacation,
-            ...req.body,
+            ...req.body
         };
         const updateVacation = await mainModel.update(id, vacationData);
         res.status(200).json(updateVacation);
