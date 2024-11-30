@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+  description: API documentation for my Express app
+paths:
+  /api/vacation:
+    get:
+      summary: Get all vacations from the database. Filter by query parameters.
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/Status'
+          description: Filter by status (draft, pending, paid)
+          nullable: true
+          example: pending
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+          nullable: true
+          default: 0
+          example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of items per page
+          nullable: true
+          default: 10
+          example: 2
+      tags:
+        - Vacations
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Create a new vacation in the database.
+      tags:
+        - Vacations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vacation'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/BadRequest'
+  /api/vacation/{id}:
+    patch:
+      summary: Update an existing vacation in the database.
+      tags:
+        - Vacations
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+          description: The database ID of the vacation
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacationUpdate'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Element not found
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          description: Validation error
+          $ref: '#/components/responses/BadRequest'
+    delete:
+      summary: Delete a vacation from the database.
+      tags:
+        - Vacations
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+          description: The database ID of the vacation
+          example: 1
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Element not found
+          $ref: '#/components/responses/BadRequest'
+  /api/users:
+    get:
+      summary: Get users with filter by query parameters.
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: role
+          schema:
+            $ref: '#/components/schemas/Role'
+          description: Filter by role (validator, requester)
+          nullable: true
+          example: requester
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Creata a new user.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+      required:
+        - name
+        - role
+    Vacation:
+      type: object
+      properties:
+        requester_id:
+          type: integer
+        validator_id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+        comments:
+          type: string
+      required:
+        - requester_id
+        - validator_id
+        - start-date
+        - end-date
+        - status
+    VacationUpdate:
+      type: object
+      properties:
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+        comments:
+          type: string
+      required:
+        - status
+    Status:
+      type: string
+      enum:
+        - pending,
+        - approved, 
+        - rejected
+    Role:
+      type: string
+      enum:
+        - validator
+        - requester
+  responses:
+    BadRequest:
+      description: Bad Request due to invalid input or parameters
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: A short description of the error.
+              detail:
+                type: string
+                description: A detail information about error.
+              errors:
+                type: array
+                description: Additional details about the error (optional).
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: A more detailed error message for the field.
+            required:
+              - title
+              - detail
+tags: []
