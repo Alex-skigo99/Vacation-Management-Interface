@@ -52,7 +52,7 @@ export const mainController = {
             ...req.body
         };
         const updateVacation = await mainModel.update(id, vacationData);
-        res.status(200).json(updateVacation);
+        res.status(200).json(updateVacation[0]);
     },
 
     delete: async (req: Request, res: Response) => {

@@ -36,6 +36,7 @@ paths:
       responses:
         '200':
           description: Success
+          $ref: '#/components/responses/Success'
     post:
       summary: Create a new vacation in the database.
       tags:
@@ -128,7 +129,7 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-        '200':
+        '201':
           description: Success
 components:
   schemas:
@@ -167,11 +168,34 @@ components:
         - start-date
         - end-date
         - status
+    Success:
+      type: object
+      properties:
+        id:
+          type: integer
+        requester_id:
+          type: integer
+        validator_id:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+        comments:
+          type: string
+        requester_name:
+          type: string
+        validator_name:
+          type: string
     VacationUpdate:
       type: object
       properties:
-        reason:
-          type: string
         status:
           $ref: '#/components/schemas/Status'
         comments:
