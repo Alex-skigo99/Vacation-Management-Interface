@@ -1,20 +1,29 @@
 import knex from 'knex';
-import dotenv from 'dotenv';
+// import config from '../knexfile';
+const config = require('../knexfile');
 
-dotenv.config();
 
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
+const environment = process.env.NODE_ENV || 'development';
+export const db = knex(config[environment]);
 
-export const db = knex({
-    client: 'pg',
-    connection: async () => ({
-        host: PGHOST,
-        port: PGPORT as unknown as number,
-        user: PGUSER,
-        database: PGDATABASE,
-        password: PGPASSWORD,
-    })
-});
+console.log('Connected to database', db.client.config.connection.database);
+
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+// const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
+
+// export const db = knex({
+//     client: 'pg',
+//     connection: async () => ({
+//         host: PGHOST,
+//         port: PGPORT as unknown as number,
+//         user: PGUSER,
+//         database: PGDATABASE,
+//         password: PGPASSWORD,
+//     })
+// });
 
 const cleanup = async () => {
     console.log("Closing database connection...");

@@ -10,14 +10,7 @@
 After download this project run terminal and go to the root project folder  
 In terminal execute next commands:
 
-    npm i
-    tsc
-    node build/config/init_db.js
-    cd client
-    npm i
-    npm run build
-    cd ..
-    node build/index.js
+    bash setup.sh
 
 ## Stack
 
